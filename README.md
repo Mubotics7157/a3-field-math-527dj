@@ -44,7 +44,7 @@ Keep the required reading handy while you work—the docs answer most "why does 
 
 ## Stage 1 — Observe the Coordinate Frame
 1. In simulation, drive the robot in a gentle square on the blue end of the field. Pay attention to how the robot icon moves when you push the sticks.
-2. In AdvantageScope, watch `FieldSimulation/RobotPosition` and identify which axis grows as you move downfield versus side-to-side.
+2. In AdvantageScope, watch `RealOutputs/Odometry/Robot` and identify which axis grows as you move downfield versus side-to-side.
 3. In `Drive.periodic()` (the subsystem already responsible for odometry updates), add something along the lines of:
    ```java
    Pose2d currentPose = getPose();
@@ -67,7 +67,7 @@ Keep the required reading handy while you work—the docs answer most "why does 
 _Commit suggestion:_ once the telemetry graphs look right, make a commit such as `git commit -am "Add drive pose telemetry"` so you can roll back easily later.
 
 ## Stage 2 — Define Field Reference Poses with Units
-1. Create a new file `src/main/java/frc/robot/constants/FieldReferencePoses.java` (or a similar package that fits your style). Give it a structure like:
+1. Create a new file `src/main/java/frc/robot/constants/FieldReferencePoses.java`. Give it a structure like:
    ```java
    package frc.robot.constants;
 
@@ -145,7 +145,7 @@ _Commit suggestion:_ once the telemetry graphs look right, make a commit such as
    }
    ```
    Accepting a `Distance` parameter lets callers provide tolerances in any unit.
-2. Bind a temporary helper (for instance, `controller.rightBumper().onTrue(Commands.runOnce(() -> fieldVectorTo(...))))`) so you can sample the vector in sim. Watch the `Drive/TargetDirection` log: if the target is forward and left, expect positive X and negative Y. Adjust the math until the signs feel correct, then delete the temporary binding.
+2. Bind a temporary helper (for instance, `controller.a().onTrue(Commands.runOnce(() -> fieldVectorTo(...))))`) so you can sample the vector in sim. Watch the `Drive/TargetDirection` log: if the target is forward and left, expect positive X and negative Y. Adjust the math until the signs feel correct, then delete the temporary binding.
 3. **Checkpoint 3:** When the logged vector aligns with your intuition from Stage 1, remove the temporary helper and keep this method for the next stage.
 
 ## Stage 4 — Drive to a Waypoint
